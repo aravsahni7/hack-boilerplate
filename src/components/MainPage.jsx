@@ -1,14 +1,34 @@
 import React, { useState, useCallback } from 'react';
 import Typical from 'react-typical';
 import styles from '../components/FileUpload.module.css';
+import { useNavigate } from 'react-router-dom'; // Add this import
+
+
 
 function ChatInput({ onSubmit }) {
   const [input, setInput] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(input);
+    onSubmit(input, startDate, endDate);
     setInput('');
+  };
+
+  // Generate date options for the dropdown (current year + next 5 years)
+  const generateDateOptions = () => {
+    const options = [];
+    const currentYear = new Date().getFullYear();
+    
+    for (let year = currentYear; year <= currentYear + 5; year++) {
+      for (let month = 1; month <= 12; month++) {
+        const date = `${year}-${month.toString().padStart(2, '0')}`;
+        options.push(<option key={date} value={date}>{date}</option>);
+      }
+    }
+    
+    return options;
   };
 
   return (
@@ -27,6 +47,34 @@ function ChatInput({ onSubmit }) {
         >
           Send
         </button>
+        
+        <div className="mt-3 flex space-x-4">
+          <div className="w-1/2">
+            <label htmlFor="start_date" className="block text-sm text-gray-400 mb-1">Start Date</label>
+            <select
+              id="start_date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-blue-500"
+            >
+              <option value="">Select start date</option>
+              {generateDateOptions()}
+            </select>
+          </div>
+          
+          <div className="w-1/2">
+            <label htmlFor="end_date" className="block text-sm text-gray-400 mb-1">End Date</label>
+            <select
+              id="end_date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-blue-500"
+            >
+              <option value="">Select end date</option>
+              {generateDateOptions()}
+            </select>
+          </div>
+        </div>
       </form>
     </div>
   );
@@ -74,17 +122,46 @@ function FileUploadButton({ isVisible, onClose }) {
   );
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default function MainPage() {
   const [showUpload, setShowUpload] = useState(false);
   const [messages, setMessages] = useState([]);
 
-  const handleChatSubmit = (message) => {
+  const handleChatSubmit = (message, startDate, endDate) => {
+    // Include the date values in the message display
+    let fullMessage = message;
+    if (startDate || endDate) {
+      fullMessage += ` (Period: ${startDate || 'N/A'} to ${endDate || 'N/A'})`;
+    }
+    
+    
+    
     setMessages([...messages, { text: message, type: 'user' }]);
     // Add your chat processing logic here
   };
 
+  const navigateToSchedule = () => {
+    navigate('/schedule'); // Navigate to schedule page
+  };
+
   return (
-    <div className="h-screen w-screen bg-black text-white flex flex-col items-center">
+    <div 
+      className="h-screen w-screen bg-black text-white flex flex-col items-center"
+      onClick={navigateToSchedule} // Add click handler to the entire main page
+    >
       <div className="flex-1 w-full max-w-4xl px-4 flex flex-col items-center justify-center">
         <h1 className="text-6xl font-extrabold mb-4">
           Welcome to{' '}
@@ -101,7 +178,11 @@ export default function MainPage() {
         </p>
       </div>
       
-      <div className="w-full max-w-4xl px-4 mb-8">
+      {/* Stop propagation to prevent navigation when interacting with these elements */}
+      <div 
+        className="w-full max-w-4xl px-4 mb-8"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="mb-4">
           {messages.map((msg, index) => (
             <div key={index} className="mb-4 p-4 rounded-lg bg-gray-800">
@@ -125,4 +206,3 @@ export default function MainPage() {
     </div>
   );
 }
-// This code is a React component that serves as the main page of a web application.
