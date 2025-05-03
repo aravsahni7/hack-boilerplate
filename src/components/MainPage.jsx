@@ -138,29 +138,50 @@ function FileUploadButton({ isVisible, onClose }) {
 
 export default function MainPage() {
   const [showUpload, setShowUpload] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [schedule, setSchedule] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleChatSubmit = (message, startDate, endDate) => {
-    // Include the date values in the message display
-    let fullMessage = message;
-    if (startDate || endDate) {
-      fullMessage += ` (Period: ${startDate || 'N/A'} to ${endDate || 'N/A'})`;
+  const handleChatSubmit = async (message, startDate, endDate) => {
+    try {
+      setError('');
+      console.log('Sending request:', { message, startDate, endDate });
+
+      const response = await fetch('http://localhost:5001/generate-schedule', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          school_information: message,
+          start_date: startDate,
+          end_date: endDate
+        }),
+      });
+
+      const data = await response.json();
+      console.log('Received response:', data);
+
+      if (data.schedule) {
+        setSchedule(data.schedule);
+      } else {
+        setError(data.error || 'Failed to generate schedule');
+        console.error('Error:', data.error);
+      }
+    } catch (error) {
+      setError('Network error: Failed to connect to server');
+      console.error('Error:', error);
     }
-    
-    
-    
-    setMessages([...messages, { text: message, type: 'user' }]);
-    // Add your chat processing logic here
   };
 
   const navigateToSchedule = () => {
-    navigate('/schedule'); // Navigate to schedule page
+    navigate('/schedule');
   };
 
   return (
     <div 
       className="h-screen w-screen bg-black text-white flex flex-col items-center"
-      onClick={navigateToSchedule} // Add click handler to the entire main page
+      onClick={navigateToSchedule}
     >
       <div className="flex-1 w-full max-w-4xl px-4 flex flex-col items-center justify-center">
         <h1 className="text-6xl font-extrabold mb-4">
@@ -178,19 +199,33 @@ export default function MainPage() {
         </p>
       </div>
       
-      {/* Stop propagation to prevent navigation when interacting with these elements */}
       <div 
         className="w-full max-w-4xl px-4 mb-8"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4">
-          {messages.map((msg, index) => (
-            <div key={index} className="mb-4 p-4 rounded-lg bg-gray-800">
-              {msg.text}
-            </div>
-          ))}
-        </div>
         <ChatInput onSubmit={handleChatSubmit} />
+        
+        {/* Error Display */}
+        {error && (
+          <div className="mt-4 p-4 rounded-lg bg-red-900 border border-red-700 text-white">
+            {error}
+          </div>
+        )}
+
+        {/* Schedule Display */}
+        {schedule && (
+          <div className="mt-6 p-6 rounded-lg bg-gray-800 border border-gray-700">
+            <h2 className="text-xl font-bold mb-4 text-blue-400">Daily Study Schedule:</h2>
+            <div className="space-y-4">
+              {schedule.split('\n\n').map((day, index) => (
+                <div key={index} className="p-4 bg-gray-700 rounded text-white">
+                  {day}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <button
           onClick={() => setShowUpload(true)}
           className="mt-4 w-full p-4 rounded-lg bg-gray-800 border border-gray-700 text-white hover:bg-gray-700 transition-colors"

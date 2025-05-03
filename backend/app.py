@@ -1,3 +1,5 @@
+
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import hashlib
@@ -9,7 +11,57 @@ app = Flask(__name__)
 CORS(app)
 
 API_KEY = "AIzaSyB0IdA26Gsd-oDuuWGHEuPEW1D4ziahSEU"
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={API_KEY}"
+
+# Update to use gemini-1.5-pro
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key={API_KEY}"
+
+@app.route('/generate-schedule', methods=['POST'])
+def generate_schedule():
+    print("Received request")
+    data = request.json
+    print("Request data:", data)
+    
+    school_info = data.get("school_information")
+    start_date = data.get("start_date")
+    end_date = data.get("end_date")
+
+    if not all([school_info, start_date, end_date]):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    prompt = (
+        f"Create a schedule knowing my syllabus: {school_info} "
+        f"and knowing my school starts on {start_date} and ends on {end_date}. "
+        "Knowing the length of each content of the syllabus as I provided and the dates, "
+        "spread out the work I should study and assignments I should do in a clear schedule with format:\n\n"
+        "year-month-date:\n\"work to do\"\n\nyear-month-date:\n\"work to do\""
+    )
+
+    try:
+        response = requests.post(
+            GEMINI_URL,
+            json={
+                "contents": [{
+                    "parts": [{"text": prompt}]
+                }]
+            },
+            headers={"Content-Type": "application/json"}
+        )
+        
+        if response.status_code != 200:
+            print("Error response:", response.text)
+            return jsonify({"error": f"Failed to generate schedule: {response.text}"}), 500
+
+        result = response.json()
+        if 'candidates' in result and len(result['candidates']) > 0:
+            schedule = result['candidates'][0]['content']['parts'][0]['text']
+            return jsonify({"schedule": schedule})
+        else:
+            return jsonify({"error": "No schedule generated"}), 500
+
+    except Exception as e:
+        print("Exception:", str(e))
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
+
 
 # —— Signup endpoint ——
 @app.route('/signup', methods=['POST'])
@@ -68,41 +120,7 @@ def login():
         'user': {'firstname': firstname, 'lastname': lastname, 'email': email}
     })
 
-# —— Schedule Generator endpoint ——
-@app.route('/generate-schedule', methods=['POST'])
-def generate_schedule():
-    data = request.json
-    school_info = data.get("school_information")
-    start_date = data.get("start_date")
-    end_date = data.get("end_date")
 
-    if not all([school_info, start_date, end_date]):
-        return jsonify({"error": "EMPTY ERROR"}), 400
-
-    prompt = (
-        f"Create a schedule knowing my syllabus: {school_info} "
-        f"and knowing my school starts on {start_date} and ends on {end_date}. "
-        "Knowing the length of each content of the syllabus as I provided and the dates, "
-        "spread out the work I should study and assignments I should do in a clear schedule with format:\n\n"
-        "year-month-date:\n\"work to do\"\n\nyear-month-date:\n\"work to do\""
-    )
-
-    response = requests.post(
-        GEMINI_URL,
-        json={"contents": [{"parts": [{"text": prompt}]}]},
-        headers={"Content-Type": "application/json"}
-    )
-
-    if response.status_code != 200:
-        return jsonify({"error": f"Failed to generate schedule: {response.text}"}), 500
-
-    result = response.json()
-    try:
-        generated_text = result['candidates'][0]['content']['parts'][0]['text']
-    except (KeyError, IndexError):
-        return jsonify({"error": "Invalid response from Gemini"}), 500
-
-    return jsonify({"schedule": generated_text})
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(debug=True, port=5001)

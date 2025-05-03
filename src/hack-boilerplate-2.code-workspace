@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "hack-boilerplate",
+			"path": "../hack-boilerplate"
+		}
+	],
+	"settings": {}
+}

@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import ScheduleCalendar from '../components/ScheduleCalendar';
+import ScheduleCalendar from './ScheduleCalendar';
 
 export default function SchedulePage() {
   const location = useLocation();

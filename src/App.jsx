@@ -7,6 +7,7 @@ import HomePage from './components/HomePage'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './components/MainPage';
 
+
 export default function App() {
   return (
     <BrowserRouter>
