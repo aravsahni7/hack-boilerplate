@@ -84,7 +84,7 @@ def generate_schedule():
         f"and knowing my school starts on {start_date} and ends on {end_date}. "
         "Knowing the length of each content of the syllabus as I provided and the dates, "
         "spread out the work I should study and assignments I should do in a clear schedule with format:\n\n"
-        "DATE:\n\"work to do\"\n\nDATE:\n\"work to do\""
+        "year-month-date:\n\"work to do\"\n\nyear-month-date:\n\"work to do\""
     )
 
     response = requests.post(
