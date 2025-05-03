@@ -5,163 +5,156 @@ import MainPage from './MainPage'
 import logo from '/Users/ansh/Downloads/ChatGPT Image May 3, 2025, 12_52_14 AM Background Removed.png'
 
 // Registration modal component
+// Registration modal component
 function RegisterModal({ onClose, onSignIn, onSubmit }) {
     const [firstname, setFirstname] = useState('')
-    const [lastname, setLastname] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirm, setConfirm] = useState('')
+    const [lastname,  setLastname]  = useState('')
+    const [email,     setEmail]     = useState('')
+    const [password,  setPassword]  = useState('')
+    const [confirm,   setConfirm]   = useState('')
   
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
-      <div className="relative bg-gray-900 text-white p-6 rounded-2xl border border-gray-700 max-w-md w-full">
-        <button
-          className="absolute top-4 right-4 text-gray-400 hover:text-white"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-        <p className="text-2xl font-semibold mb-2 text-blue-400">Register</p>
-        <p className="text-sm text-gray-400 mb-4">
-          Signup now and get full access to our app.
-        </p>
-        {/* Input fields */}
-        <div className="flex gap-2 mb-4">
-          <label className="flex-1 relative">
-            <input
-              type="text"
-              placeholder=" "
-              required
-              className="w-full bg-gray-800 text-white px-2 py-2 border border-gray-600 rounded focus:outline-none focus:border-blue-400 peer"
-            />
-            <span className="absolute left-2 top-1 text-gray-400 text-sm transition-all peer-placeholder-shown:top-2.5 peer-focus:top-0.5 peer-focus:text-blue-400 peer-valid:top-0.5 peer-valid:text-blue-400">
-              Firstname
-            </span>
-          </label>
-          <label className="flex-1 relative">
-            <input
-              type="text"
-              placeholder=" "
-              required
-              className="w-full bg-gray-800 text-white px-2 py-2 border border-gray-600 rounded focus:outline-none focus:border-blue-400 peer"
-            />
-            <span className="absolute left-2 top-1 text-gray-400 text-sm transition-all peer-placeholder-shown:top-2.5 peer-focus:top-0.5 peer-focus:text-blue-400 peer-valid:top-0.5 peer-valid:text-blue-400">
-              Lastname
-            </span>
-          </label>
-        </div>
-        <label className="relative block mb-4">
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+        <div className="relative bg-gray-900 text-white p-6 rounded-2xl border border-gray-700 max-w-md w-full">
+          <button
+            className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            onClick={onClose}
+          >
+            ✕
+          </button>
+          <h2 className="text-2xl font-semibold mb-2 text-blue-400">Register</h2>
+          <p className="text-sm text-gray-400 mb-4">
+            Signup now and get full access to our app.
+          </p>
+  
+          <input
+            type="text"
+            placeholder="Firstname"
+            required
+            value={firstname}
+            onChange={e => setFirstname(e.target.value)}
+            className="w-full mb-2 bg-gray-800 text-white px-2 py-2 rounded focus:outline-none focus:border-blue-400"
+          />
+  
+          <input
+            type="text"
+            placeholder="Lastname"
+            required
+            value={lastname}
+            onChange={e => setLastname(e.target.value)}
+            className="w-full mb-2 bg-gray-800 text-white px-2 py-2 rounded focus:outline-none focus:border-blue-400"
+          />
+  
           <input
             type="email"
-            placeholder=" "
+            placeholder="Email"
             required
-            className="w-full bg-gray-800 text-white px-2 py-2 border border-gray-600 rounded focus:outline-none focus:border-blue-400 peer"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="w-full mb-2 bg-gray-800 text-white px-2 py-2 rounded focus:outline-none focus:border-blue-400"
           />
-          <span className="absolute left-2 top-1 text-gray-400 text-sm transition-all peer-placeholder-shown:top-2.5 peer-focus:top-0.5 peer-focus:text-blue-400 peer-valid:top-0.5 peer-valid:text-blue-400">
-            Email
-          </span>
-        </label>
-        <label className="relative block mb-4">
+  
           <input
             type="password"
-            placeholder=" "
+            placeholder="Password"
             required
-            className="w-full bg-gray-800 text-white px-2 py-2 border border-gray-600 rounded focus:outline-none focus:border-blue-400 peer"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="w-full mb-2 bg-gray-800 text-white px-2 py-2 rounded focus:outline-none focus:border-blue-400"
           />
-          <span className="absolute left-2 top-1 text-gray-400 text-sm transition-all peer-placeholder-shown:top-2.5 peer-focus:top-0.5 peer-focus:text-blue-400 peer-valid:top-0.5 peer-valid:text-blue-400">
-            Password
-          </span>
-        </label>
-        <label className="relative block mb-6">
+  
           <input
             type="password"
-            placeholder=" "
+            placeholder="Confirm password"
             required
-            className="w-full bg-gray-800 text-white px-2 py-2 border border-gray-600 rounded focus:outline-none focus:border-blue-400 peer"
+            value={confirm}
+            onChange={e => setConfirm(e.target.value)}
+            className="w-full mb-4 bg-gray-800 text-white px-2 py-2 rounded focus:outline-none focus:border-blue-400"
           />
-          <span className="absolute left-2 top-1 text-gray-400 text-sm transition-all peer-placeholder-shown:top-2.5 peer-focus:top-0.5 peer-focus:text-blue-400 peer-valid:top-0.5 peer-valid:text-blue-400">
-            Confirm password
-          </span>
-        </label>
-        <button
-          className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded mb-2"
-          onClick={onSubmit}
-        >
-          Submit
-        </button>
-        <p className="text-center text-gray-400 text-sm">
-          Already have an account?{' '}
+  
           <button
-            onClick={onSignIn}
-            className="text-blue-400 hover:underline focus:outline-none"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded mb-2"
+            onClick={() =>
+              onSubmit({ firstname, lastname, email, password, confirm })
+            }
           >
-            Sign in
+            Submit
           </button>
-        </p>
+  
+          <p className="text-center text-gray-400 text-sm">
+            Already have an account?{' '}
+            <button
+              onClick={onSignIn}
+              className="text-blue-400 hover:underline focus:outline-none"
+            >
+              Sign in
+            </button>
+          </p>
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
+  
 
 // Sign-in modal component
+// Sign-in modal component
 function SignInModal({ onClose, onRegister, onSubmit }) {
-    const [email, setEmail] = useState('')
+    const [email,    setEmail]    = useState('')
     const [password, setPassword] = useState('')
   
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
-      <div className="relative bg-gray-900 text-white p-6 rounded-2xl border border-gray-700 max-w-md w-full">
-        <button
-          className="absolute top-4 right-4 text-gray-400 hover:text-white"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-        <p className="text-2xl font-semibold mb-2 text-blue-400">Sign In</p>
-        <p className="text-sm text-gray-400 mb-4">
-          Welcome back! Please sign in to your account.
-        </p>
-        <label className="relative block mb-4">
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+        <div className="relative bg-gray-900 text-white p-6 rounded-2xl border border-gray-700 max-w-md w-full">
+          <button
+            className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            onClick={onClose}
+          >
+            ✕
+          </button>
+          <h2 className="text-2xl font-semibold mb-2 text-blue-400">Sign In</h2>
+          <p className="text-sm text-gray-400 mb-4">
+            Welcome back! Please sign in to your account.
+          </p>
+  
           <input
             type="email"
-            placeholder=" "
+            placeholder="Email"
             required
-            className="w-full bg-gray-800 text-white px-2 py-2 border border-gray-600 rounded focus:outline-none focus:border-blue-400 peer"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="w-full mb-4 bg-gray-800 text-white px-2 py-2 rounded focus:outline-none focus:border-blue-400"
           />
-          <span className="absolute left-2 top-1 text-gray-400 text-sm transition-all peer-placeholder-shown:top-2.5 peer-focus:top-0.5 peer-focus:text-blue-400 peer-valid:top-0.5 peer-valid:text-blue-400">
-            Email
-          </span>
-        </label>
-        <label className="relative block mb-6">
+  
           <input
             type="password"
-            placeholder=" "
+            placeholder="Password"
             required
-            className="w-full bg-gray-800 text-white px-2 py-2 border border-gray-600 rounded focus:outline-none focus:border-blue-400 peer"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="w-full mb-6 bg-gray-800 text-white px-2 py-2 rounded focus:outline-none focus:border-blue-400"
           />
-          <span className="absolute left-2 top-1 text-gray-400 text-sm transition-all peer-placeholder-shown:top-2.5 peer-focus:top-0.5 peer-focus:text-blue-400 peer-valid:top-0.5 peer-valid:text-blue-400">
-            Password
-          </span>
-        </label>
-        <button
-          className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded mb-2"
-          onClick={onSubmit}
-        >
-          Submit
-        </button>
-        <p className="text-center text-gray-400 text-sm">
-          Don't have an account?{' '}
+  
           <button
-            onClick={onRegister}
-            className="text-blue-400 hover:underline focus:outline-none"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded mb-2"
+            onClick={() => onSubmit({ email, password })}
           >
-            Register
+            Submit
           </button>
-        </p>
+  
+          <p className="text-center text-gray-400 text-sm">
+            Don't have an account?{' '}
+            <button
+              onClick={onRegister}
+              className="text-blue-400 hover:underline focus:outline-none"
+            >
+              Register
+            </button>
+          </p>
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
+  
 
 // Guest modal component
 function GuestModal({ onClose, onContinue }) {
